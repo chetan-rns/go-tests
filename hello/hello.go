@@ -1,4 +1,4 @@
-package main
+package hello
 
 import "fmt"
 
@@ -19,9 +19,9 @@ func hello(name, language string) string {
 func greetingPrefix(language string) (prefix string) {
 
 	switch language {
-	case Kannada:
+	case "Kannada":
 		prefix = kannadaHelloPrefix
-	case Spanish:
+	case "Spanish":
 		prefix = spanishHelloPrefix
 	default:
 		prefix = englishHelloPrefix
