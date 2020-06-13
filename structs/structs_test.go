@@ -1,35 +1,61 @@
 package structs
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
 
-func TestPerimeter(t *testing.T) {
+type shape interface {
+	area() float64
+}
 
-	rectangle := Rectangle{2.0, 3.0}
-	got := rectangle.Permeter()
-	want := 10.0
-	if got != want {
-		t.Errorf("got %.2f want %.2f", got, want)
-	}
+type rectangle struct {
+	width  float64
+	height float64
+}
+
+func (r rectangle) area() float64 {
+	return r.width * r.height
+}
+
+func (r rectangle) perimeter() float64 {
+	return 2 * (r.width + r.height)
+}
+
+type circle struct {
+	radius float64
+}
+
+func (c circle) area() float64 {
+	return math.Pi * c.radius * c.radius
+}
+
+func (c circle) perimeter() float64 {
+	return 2 * math.Pi * c.radius
 }
 
 func TestArea(t *testing.T) {
-	rectangle := Rectangle{2.0, 3.0}
-	got := rectangle.Area()
-	want := 6.0
-	if got != want {
-		t.Errorf("got %.2f want %.2f", got, want)
+
+	tt := []struct {
+		name string
+		shape
+		want float64
+	}{
+		{"area of a rectangle", rectangle{2.0, 2.0}, 4.0},
+		{"area of a circle", circle{10.0}, 314.1592653589793},
+	}
+
+	for _, test := range tt {
+		t.Run(test.name, func(t *testing.T) {
+			got := test.shape.area()
+			checkValue(t, got, test.want)
+		})
 	}
 }
 
-type Rectangle struct {
-	Width  float64
-	Height float64
-}
-
-func (r *Rectangle) Permeter() float64 {
-	return 2 * (r.Width + r.Height)
-}
-
-func (r *Rectangle) Area() float64 {
-	return r.Width * r.Height
+func checkValue(t *testing.T, got, want float64) {
+	t.Helper()
+	if got != want {
+		t.Errorf("got %.2f want %.2f", got, want)
+	}
 }
