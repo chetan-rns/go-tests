@@ -12,13 +12,13 @@ func Greet(writer io.Writer, name string) {
 }
 
 func TestGreet(t *testing.T) {
-	buffer := bytes.Buffer{}
-	Greet(&buffer, "test")
+	buffer := &bytes.Buffer{}
+	Greet(buffer, "Foo")
 
 	got := buffer.String()
-	want := "Hello test!"
+	want := "Hello Foo!"
 
 	if got != want {
-		t.Fatalf("got %q want %q", got, want)
+		t.Errorf("got %q, want %q", got, want)
 	}
 }
