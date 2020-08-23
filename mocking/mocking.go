@@ -8,39 +8,30 @@ import (
 )
 
 const (
-	finalWord      = "Go!"
 	countDownStart = 3
+	finalWord      = "Go!"
 )
 
-func main() {
-	sleeper := &configurableSleeper{1 * time.Second, time.Sleep}
-	countDown(os.Stdout, sleeper)
-}
-
-type sleeper interface {
+type Sleeper interface {
 	Sleep()
 }
+type DefaultSleeper struct {
+}
 
-type defaultSleeper struct{}
-
-func (d *defaultSleeper) Sleep() {
+func (d *DefaultSleeper) Sleep() {
 	time.Sleep(1 * time.Second)
 }
 
-type configurableSleeper struct {
-	duration time.Duration
-	sleep    func(time.Duration)
+func main() {
+	sleeper := &DefaultSleeper{}
+	countDown(os.Stdout, sleeper)
 }
 
-func (c *configurableSleeper) Sleep() {
-	c.sleep(c.duration)
-}
-
-func countDown(out io.Writer, s sleeper) {
-	for i := countDownStart; i > 0; i-- {
-		s.Sleep()
-		fmt.Fprintf(out, "%d\n", i)
+func countDown(w io.Writer, sleeper Sleeper) {
+	for i := countDownStart; i >= 1; i-- {
+		sleeper.Sleep()
+		fmt.Fprintln(w, i)
 	}
-	s.Sleep()
-	fmt.Fprint(out, finalWord)
+	sleeper.Sleep()
+	fmt.Fprint(w, finalWord)
 }
