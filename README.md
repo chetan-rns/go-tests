@@ -1,1 +1,2 @@
 # go-tests
+Sample
