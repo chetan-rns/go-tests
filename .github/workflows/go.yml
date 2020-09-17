@@ -33,6 +33,14 @@ jobs:
     - name: Test
       run: go test -v ./...
       
-    - name: Codecov
-      uses: codecov/codecov-action@v1.0.13
+    - name: Generate coverage report
+      run: |
+        go test `go list ./... | grep -v examples` -coverprofile=coverage.txt -covermode=atomic
+        
+    - name: Upload coverage report
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.txt
+        flags: unittests
+        name: codecov-umbrella        
 
