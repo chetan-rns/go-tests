@@ -4,13 +4,10 @@ metadata:
   creationTimestamp: null
   name: sample
 spec:
-  maxReplicas: 5
-  minReplicas: 2
+  maxReplicas: 2
+  minReplicas: 1
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: sample
   targetCPUUtilizationPercentage: 20
-status:
-  currentReplicas: 0
-  desiredReplicas: 0
